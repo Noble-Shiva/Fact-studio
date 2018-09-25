@@ -1,0 +1,78 @@
+@import '~@angular/material/theming';
+
+@mixin comment-theme($theme) {
+  $primary: map-get($theme, primary);
+
+   .commentContainer {
+      background-color: mat-color($primary,800);
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
+}
+
+@mixin mainContent-theme($theme) {
+  $primary: map-get($theme, primary);
+
+   .mainConent {
+      background-color: mat-color($primary,800);
+    }
+
+}
+
+mat-card {
+  margin: 10px auto;
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-chip-list .mat-chip-list-wrapper {
+  align-items: center;
+}
+mat-chip {
+  padding: 1% 1% 1% 0 ;
+}
+.chipsetImage {
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+}
+}
+
+mat-list {
+  margin: 10px auto;
+  max-width: 700px;
+
+  .commentButton {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  textarea {
+    width: 90%;
+    height: 100%;
+  }
+}
+
+.alignContent{
+  margin: 0 10%;
+  .colLeft {
+    position: relative;
+    float: left;
+    width: 250px;
+  }
+  .colRight {
+    position: relative;
+    float: right;
+    width: 750px;
+  }
+}
+
+.factTitle {
+  text-align: -webkit-center;
+  font-size: 250%;
+}
+
+

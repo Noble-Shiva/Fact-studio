@@ -1,0 +1,12 @@
+@import '../components/navbar/navbar.component.scss';
+@import '../components/theme-strip/theme-strip.component.scss';
+@import '../../facts/fact-detail/fact-detail.component.scss';
+@import './../../app.component.scss';
+
+@mixin component-themes($theme) {
+  @include mainContent-theme($theme);
+  @include strip-theme($theme);
+  @include comment-theme($theme);
+  @include main-theme($theme);
+  @include scrollbars(.5em, mat-color(map-get($theme, primary), lighter));
+}

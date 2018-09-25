@@ -1,0 +1,55 @@
+<mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            Filter
+        </mat-panel-title>
+        <mat-panel-description>
+            {{ filterMsg }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-form-field>
+          <mat-select placeholder="Post Category" [(ngModel)]= "selectedCategory"
+          (selectionChange)="changeCategory($event.value)" name="category">
+              <mat-option *ngFor="let category of categoryList;" [value]="category">
+                {{category}}
+              </mat-option>
+            </mat-select>
+      </mat-form-field>
+
+      <button mat-button (click)="clearFilter()">Clear Filter</button>
+      </mat-expansion-panel>
+      </mat-accordion>
+
+<mat-grid-list cols="3" rowHeight="1:1" md-gutter = "25px">
+    <mat-grid-tile *ngFor="let fact of facts | async">
+    <mat-card>
+      <mat-card-content routerLink="{{fact.id}}">
+        <img mat-card-image src="{{fact.image}}" alt="{{fact.title}}">
+        <mat-card-title>{{fact.title}}</mat-card-title>
+      <mat-card-subtitle>
+          <p class="authorDetails">
+              <small>
+                <mat-chip-list>
+                  Posted by
+                  <mat-chip (click)="authorStory(fact.authorId,fact.author)"><img src='{{ fact.authorPhoto }}' class="chipsetImage"/>{{ fact.author }}</mat-chip> &bull; on {{ fact.published['nanoseconds'] | json | date:'fullDate' }}
+                </mat-chip-list>
+              </small>
+            </p>
+      </mat-card-subtitle>
+      </mat-card-content>
+      <mat-divider></mat-divider>
+      <mat-card-footer>
+              <label role="" color="primary" *ngFor="let category of fact.category;">
+                  <mat-icon class="material-icons">local_offer</mat-icon>{{category}}.
+              </label>
+      </mat-card-footer>
+      <!-- <mat-card-actions align="end" *ngIf="auth.currentUserId === fact.authorId">
+        <button mat-icon-button (click)="delete(fact.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions> -->
+    </mat-card>
+    </mat-grid-tile>
+    </mat-grid-list>

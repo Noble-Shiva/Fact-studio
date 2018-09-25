@@ -1,0 +1,55 @@
+
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" color="warn">
+          <mat-icon aria-label="More details">menu</mat-icon>
+        </button>
+    <img src="./../../../../assets/fsLOGO.png" class="navbarLogo"/>
+    <h1><span routerLink="/">Fact Studio</span></h1>
+    <span class="spacer"></span>
+    <div *ngIf="auth.afAuth.authState | async as user; else showLogin" >
+      <div class="userToolbarDetails">
+        <button routerLink="/dashboard" mat-raised-button color="accent">Write a Post</button>
+        <img src="{{ user.photoURL }}" class="loginUserImage"/>
+          Hi, {{user.displayName}}
+        <button (click)="auth.logout()" mat-button>Logout</button>
+      </div>
+    </div>
+    <ng-template #showLogin>
+      <button (click)="auth.login()" class="userLoginButton" mat-button>Login with Google</button>
+    </ng-template>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container class="sideNavContainer">
+    <mat-sidenav #drawer mode="push" role="navigation" class="sideNavContent">
+      <mat-nav-list>
+          <div *ngIf="auth.afAuth.authState | async as user; else showLogin">
+
+          <mat-card [style.background-image]="'url(' + user.photoURL + ')'"
+          [ngStyle]="{'background-size': 'cover'}" class="userNavDetails">
+              <mat-card-header>
+                <div mat-card-avatar
+                [style.background-image]="'url(' + user.photoURL + ')'"
+                [ngStyle]="{'background-size': 'cover'}"></div>
+                <mat-card-title>{{user.displayName}}</mat-card-title>
+                <mat-card-subtitle>{{user.email}}</mat-card-subtitle>
+              </mat-card-header>
+              </mat-card>
+              </div>
+              <ng-template #showLogin>
+                  <button (click)="auth.login()" mat-button>Login with Google</button>
+                </ng-template>
+      </mat-nav-list>
+      <mat-nav-list>
+        <a mat-list-item routerLink='/'>Home</a>
+        <a mat-list-item routerLink='/blog'>Facts</a>
+        <div *ngIf="auth.afAuth.authState | async as user">
+        <a mat-list-item routerLink='/dashboard'>Write Post</a>
+        <a mat-list-item routerLink='/' (click)="auth.logout()">Logout</a>
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

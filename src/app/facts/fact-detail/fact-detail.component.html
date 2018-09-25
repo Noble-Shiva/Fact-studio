@@ -1,0 +1,110 @@
+<ng-container *ngIf="fact">
+    <h1 class="factTitle">{{ fact.title }}</h1>
+    <div class="alignContent">
+      <div class="colLeft">
+          <mat-card>
+              <h2>Author Details</h2>
+              <mat-card-content>
+                  <img mat-card-avatar src='{{ fact.authorPhoto }}'/>
+                  <mat-card-title>{{ fact.author }}</mat-card-title>
+                  <mat-card-subtitle>on {{ fact.published['nanoseconds'] | json | date:'fullDate' }}</mat-card-subtitle>
+                  <label>Category : {{ fact.category }}</label>
+              </mat-card-content>
+              <mat-divider></mat-divider>
+              <mat-card-actions align="center">
+                <button mat-button [routerLink]="['/blog']" (click)="authorStory(fact.authorId,fact.author)" color='warn'>More Posts</button>
+              </mat-card-actions>
+            </mat-card>
+      </div>
+    </div>
+      <div [hidden]="!editing" class="mainContent">
+          <div class="alignContent">
+
+              <div class="colRight">
+        <mat-card>
+          <h1>Edit Post</h1>
+            <mat-form-field>
+              <input matInput placeholder="Post title" [(ngModel)]="fact.title" name="title">
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <textarea matInput placeholder="Post content" [(ngModel)]="fact.content" name="content" rows="10"></textarea>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <mat-select placeholder="Post Category" [(ngModel)]= "fact.category" name="category" [compareWith]="compareWithFunc" multiple>
+                <mat-option *ngFor="let category of categoryList;let i= index;"
+                  [value]="category" selected="i==0">
+                  {{category}}
+                </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <button mat-raised-button (click)="updateFact()" color="accent">Save</button>
+            <button mat-button (click)="editing=false" *ngIf="editing">Cancel</button>
+      </mat-card>
+      </div>
+      </div>
+      </div>
+
+      <div [hidden]="editing" class="mainContent">
+            <div class="alignContent">
+
+                <div class="colRight">
+                    <mat-card>
+                        <mat-card-title>{{fact.title}}</mat-card-title>
+                        <img mat-card-image src="{{fact.image}}" alt="{{fact.title}}">
+                        <mat-card-content>
+                          <p>{{ fact.content }}</p>
+                        </mat-card-content>
+                        <mat-divider></mat-divider>
+                        <mat-card-actions align="end" *ngIf="auth.currentUserId === fact.authorId">
+                          <button mat-icon-button (click)="editing=true">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button (click)="delete(fact.id)">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </mat-card-actions>
+                      </mat-card>
+                </div>
+            </div>
+        </div>
+  <div class="alignContent">
+          <mat-list class="commentContainer colRight">
+      <div *ngIf="auth.afAuth.authState | async as user; else showComments">
+              <mat-list-item>
+                  <img matListAvatar src="{{ user.photoURL }}"/>
+                  <h3 matLine> {{user.displayName}} </h3>
+                  <p matLine>
+                    <mat-form-field>
+                      <textarea matInput placeholder="Leave a comment" [(ngModel)]='commentValue' required></textarea>
+
+                      <button (click) = 'addComment(commentValue)' mat-icon-button color='accent'class='commentButton' [disabled]="!commentValue"><mat-icon>send</mat-icon></button>
+                    </mat-form-field>
+                  </p>
+                </mat-list-item>
+              </div>
+                </mat-list>
+            <mat-list class="commentContainer colRight" *ngIf="fact.comments">
+              <mat-list-item *ngFor="let comment of commentsList">
+                <img matListAvatar src="{{ comment.commentUserPhoto }}">
+                <small matLine>
+                  <b>{{comment.commentUserName}}</b>
+                  on  {{ comment.commentDate['nanoseconds'] | json | date:'fullDate' }}
+                </small>
+                <p matLine>
+                  <span>{{comment.commentBody}} </span>
+                </p>
+                <mat-divider></mat-divider>
+              </mat-list-item>
+            </mat-list>
+            </div>
+    <ng-template #showComments>
+        <mat-list>
+            <mat-list-item>
+                <p matLine>Please <a mat-button (click)="auth.login()">Login with Google</a>, to leave comment.</p>
+      </mat-list-item>
+      </mat-list>
+    </ng-template>
+    </ng-container>

@@ -1,0 +1,35 @@
+.navbarLogo {
+  height: 50%;
+  width: 3%;
+}
+
+.userNavDetails {
+  background-color: rgba(255,255,255,0.6);
+  opacity: 0.5;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.userToolbarDetails{
+
+  // margin-top: 10%;
+
+  button {
+    // margin-bottom: 5%;
+  }
+  .loginUserImage {
+    // margin: 0 2% -5% 3%;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+  }
+
+}
+.userLoginButton{
+  position: absolute;
+  right: 1%;
+  top: 5%;
+  // margin-top: 2% !important;
+}

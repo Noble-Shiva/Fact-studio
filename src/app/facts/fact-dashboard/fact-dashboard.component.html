@@ -1,0 +1,85 @@
+<section>
+    <mat-vertical-stepper #stepper>
+        <mat-step [stepControl]="imageFormGroup">
+          <form [formGroup]="imageFormGroup">
+            <ng-template matStepLabel>Upload Image</ng-template>
+                <input type="file" name="file" id="file" (change)="uploadImage($event)" formControlName="imageCtrl" required>
+                <div [hidden]="!uploadPercent">
+                  <mat-progress-bar mode="determinate" value = "{{ uploadPercent | async }}"></mat-progress-bar>
+                </div>
+                <div [hidden]="!image">
+                  <img [src]="image || '//:0' ">
+                </div>
+            <div>
+              <button mat-button matStepperNext [disabled]="!image">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="titleFormGroup">
+          <form [formGroup]="titleFormGroup">
+            <ng-template matStepLabel>Title of your Post</ng-template>
+            <mat-form-field>
+              <input matInput placeholder="Title" formControlName="titleCtrl" required>
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="contentFormGroup">
+            <form [formGroup]="contentFormGroup">
+              <ng-template matStepLabel>Content of your Post</ng-template>
+              <mat-form-field>
+            <textarea matInput placeholder="Content" formControlName="contentCtrl" required rows="10"></textarea>
+              </mat-form-field>
+              <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="categoryFormGroup">
+              <form [formGroup]="categoryFormGroup">
+                <ng-template matStepLabel>Category of your Post</ng-template>
+                <mat-form-field>
+              <mat-chip-list #chipList>
+                  <mat-chip
+                    *ngFor="let category of categories"
+                    [selectable]="selectable"
+                    [removable]="removable"
+                    (removed)="remove(category)">
+                    {{category}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                  </mat-chip>
+                  <input
+                    placeholder="New category..."
+                    #categoryInput
+                    [formControl]="categoryCtrl"
+                    [matAutocomplete]="auto"
+                    [matChipInputFor]="chipList"
+                    [matChipInputAddOnBlur]="addOnBlur">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                  <mat-option *ngFor="let category of filteredcategories | async" [value]="category">
+                    {{category}}
+                  </mat-option>
+                </mat-autocomplete>
+                </mat-form-field>
+                <div>
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+              </form>
+            </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          You are now done with filling fantastic details ready to post awesome fact.
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+            <button mat-raised-button (click)="createPost()" color="accent" [disabled]="!image ||  !titleFormGroup.valid || !contentFormGroup.valid ">{{saving}}</button>
+          </div>
+        </mat-step>
+      </mat-vertical-stepper>
+    </section>
